@@ -1,0 +1,1608 @@
+<!DOCTYPE html><html lang="zh"><head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>沙河口区“AI+12345”智慧客服系统功能架构提案书</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&amp;family=Inter:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+    <style>
+        :root {
+            --primary: #1e3a8a;
+            --secondary: #64748b;
+            --accent: #3b82f6;
+            --surface: #f8fafc;
+            --text: #1e293b;
+            --text-muted: #64748b;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            color: var(--text);
+            overflow-x: hidden;
+        }
+        
+        .serif { font-family: 'Playfair Display', serif; }
+        
+        .toc {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 280px;
+            height: 100vh;
+            background: linear-gradient(135deg, var(--primary) 0%, #1e40af 100%);
+            color: white;
+            padding: 2rem 1.5rem;
+            overflow-y: auto;
+            z-index: 1000;
+            box-shadow: 4px 0 20px rgba(0,0,0,0.1);
+        }
+        
+        .toc h3 {
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            font-size: 1.125rem;
+            border-bottom: 1px solid rgba(255,255,255,0.2);
+            padding-bottom: 0.75rem;
+        }
+        
+        .toc ul {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .toc li {
+            margin-bottom: 0.75rem;
+        }
+        
+        .toc a {
+            color: rgba(255,255,255,0.8);
+            text-decoration: none;
+            font-size: 0.875rem;
+            display: block;
+            padding: 0.5rem 0;
+            transition: all 0.3s ease;
+            border-left: 3px solid transparent;
+            padding-left: 1rem;
+        }
+        
+        .toc a:hover, .toc a.active {
+            color: white;
+            border-left-color: #60a5fa;
+            background: rgba(255,255,255,0.1);
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .main-content {
+            margin-left: 280px;
+            min-height: 100vh;
+        }
+        
+        .hero-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 2rem;
+            align-items: center;
+            min-height: 60vh;
+        }
+        
+        .hero-content h1 {
+            font-size: 3.2rem;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .hero-image {
+            position: relative;
+            overflow: hidden;
+            border-radius: 16px;
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25);
+        }
+        
+        .hero-image::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(30,58,138,0.8) 0%, rgba(59,130,246,0.6) 100%);
+            mix-blend-mode: multiply;
+        }
+        
+        .section-header {
+            border-left: 4px solid var(--primary);
+            padding-left: 1.5rem;
+            margin: 3rem 0 2rem 0;
+        }
+        
+        .feature-card {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+            border: 1px solid #e2e8f0;
+            transition: all 0.3s ease;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1);
+        }
+        
+        .metric-card {
+            background: linear-gradient(135deg, var(--primary) 0%, #1e40af 100%);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            text-align: center;
+        }
+        
+        .metric-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+        
+        .citation {
+            color: var(--accent);
+            text-decoration: none;
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+        
+        .citation:hover {
+            text-decoration: underline;
+        }
+        
+        .process-flow {
+            background: var(--surface);
+            border-radius: 16px;
+            padding: 2rem;
+            margin: 2rem 0;
+        }
+        
+        .flow-step {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            border-left: 4px solid var(--accent);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .mermaid-container {
+            display: flex;
+            justify-content: center;
+            min-height: 300px;
+            max-height: 800px;
+            background: #ffffff;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 30px;
+            margin: 30px 0;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .mermaid-container .mermaid {
+            width: 100%;
+            max-width: 100%;
+            height: 100%;
+            cursor: grab;
+            transition: transform 0.3s ease;
+            transform-origin: center center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            touch-action: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+
+        .mermaid-container .mermaid svg {
+            max-width: 100%;
+            height: 100%;
+            display: block;
+            margin: 0 auto;
+        }
+
+        .mermaid-container .mermaid:active {
+            cursor: grabbing;
+        }
+
+        .mermaid-container.zoomed .mermaid {
+            height: 100%;
+            width: 100%;
+            cursor: grab;
+        }
+
+        .mermaid-controls {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            display: flex;
+            gap: 10px;
+            z-index: 20;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 8px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .mermaid-control-btn {
+            background: #ffffff;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            padding: 10px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            color: #374151;
+            font-size: 14px;
+            min-width: 36px;
+            height: 36px;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .mermaid-control-btn:hover {
+            background: #f8fafc;
+            border-color: #3b82f6;
+            color: #3b82f6;
+            transform: translateY(-1px);
+        }
+
+        .mermaid-control-btn:active {
+            transform: scale(0.95);
+        }
+        
+        @media (max-width: 1024px) {
+            .toc {
+                transform: translateX(-100%);
+                transition: transform 0.3s ease;
+            }
+            
+            .toc.open {
+                transform: translateX(0);
+            }
+            
+            .main-content {
+                margin-left: 0;
+            }
+            
+            .hero-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+            
+            .hero-content h1 {
+                font-size: 2.2rem;
+            }
+
+            .mermaid-control-btn:not(.reset-zoom) {
+                display: none;
+            }
+            .mermaid-controls {
+                top: auto;
+                bottom: 15px;
+                right: 15px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hero-content h1 {
+                font-size: 1.8rem;
+            }
+            .hero-content p {
+                font-size: 1rem;
+            }
+            .hero-grid {
+                min-height: auto;
+            }
+            .hero-image img {
+                height: auto;
+                max-height: 300px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero-content h1 {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+  </head>
+
+  <body class="bg-gray-50">
+    <!-- Table of Contents -->
+    <nav class="toc">
+      <h3><i class="fas fa-list-ul mr-2"></i>目录导航</h3>
+      <ul>
+        <li>
+          <a href="#executive-summary">执行摘要</a>
+        </li>
+        <li>
+          <a href="#background">项目背景与目标</a>
+        </li>
+        <li>
+          <a href="#architecture">核心功能架构</a>
+        </li>
+        <li>
+          <a href="#mechanisms">关键机制与标准</a>
+        </li>
+        <li>
+          <a href="#technology">技术实现与系统架构</a>
+        </li>
+        <li>
+          <a href="#expected-outcomes">预期成效与价值</a>
+        </li>
+      </ul>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <!-- Hero Section -->
+      <section class="bg-gradient-to-br from-blue-50 to-white py-16 px-8">
+        <div class="max-w-6xl mx-auto">
+          <div class="hero-grid">
+            <div class="hero-content">
+              <h1 class="serif font-bold">
+                <em>沙河口区&#34;AI+12345&#34;</em>
+                <br/>
+                智慧客服系统
+                <br/>
+                功能架构提案书
+              </h1>
+              <p class="text-xl text-gray-600 mb-8 leading-relaxed">
+                构建&#34;分流→收集→转写→分析→展示&#34;全流程智慧客服解决方案，
+                实现政府服务效率与精准治理能力的全面提升
+              </p>
+              <div class="flex items-center space-x-6 text-sm text-gray-500">
+                <span><i class="fas fa-calendar mr-2"></i>2025年9月</span>
+                <span><i class="fas fa-building mr-2"></i>大连百易软件股份有限公司</span>
+                <span><i class="fas fa-robot mr-2"></i>AI政务解决方案</span>
+              </div>
+            </div>
+            <div class="hero-image">
+              <img src="https://kimi-web-img.moonshot.cn/img/img.huxiucdn.com/71bf2d6f824d96ac0c7cc2104a2b0367c0b59b91.png" alt="现代政府AI客服中心的工作环境" class="w-full h-80 object-cover" size="medium" aspect="wide" style="photo" query="政府AI客服中心" referrerpolicy="no-referrer" data-modified="1" data-score="0.00"/>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Executive Summary -->
+      <section id="executive-summary" class="py-16 px-8 bg-white">
+        <div class="max-w-6xl mx-auto">
+          <div class="section-header">
+            <h2 class="serif text-3xl font-bold text-gray-900">执行摘要</h2>
+          </div>
+
+          <div class="grid md:grid-cols-2 gap-8 mb-12">
+            <div class="feature-card">
+              <h3 class="text-xl font-semibold mb-4 text-blue-900">
+                <i class="fas fa-lightbulb mr-2"></i>核心创新
+              </h3>
+              <p class="text-gray-700">
+                通过&#34;AI+语音技术&#34;构建全流程智慧客服解决方案，实现从市民诉求接入到政府决策优化的完整闭环，
+                将传统政务服务热线升级为智能化、数据化的现代治理工具。
+              </p>
+            </div>
+
+            <div class="feature-card">
+              <h3 class="text-xl font-semibold mb-4 text-blue-900">
+                <i class="fas fa-target mr-2"></i>预期成效
+              </h3>
+              <ul class="text-gray-700 space-y-2">
+                <li>• AI分流40%以上来电，缩短等待时间</li>
+                <li>• 工单处理效率提升40%以上</li>
+                <li>• 智能派单准确率达到92%以上</li>
+                <li>• 7×24小时全天候服务能力</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+            <div class="metric-card">
+              <div class="metric-number">40%</div>
+              <div class="text-sm opacity-90">AI分流率</div>
+            </div>
+            <div class="metric-card">
+              <div class="metric-number">92%</div>
+              <div class="text-sm opacity-90">派单准确率</div>
+            </div>
+            <div class="metric-card">
+              <div class="metric-number">7×24</div>
+              <div class="text-sm opacity-90">服务覆盖</div>
+            </div>
+            <div class="metric-card">
+              <div class="metric-number">100%</div>
+              <div class="text-sm opacity-90">质检覆盖</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Background Section -->
+      <section id="background" class="py-16 px-8 bg-gray-50">
+        <div class="max-w-6xl mx-auto">
+          <div class="section-header">
+            <h2 class="serif text-3xl font-bold text-gray-900">项目背景与目标</h2>
+          </div>
+
+          <div class="grid lg:grid-cols-2 gap-12">
+            <div>
+              <h3 class="text-2xl font-semibold mb-6 text-blue-900">当前挑战</h3>
+              <div class="space-y-6">
+                <div class="flow-step">
+                  <h4 class="font-semibold text-lg mb-2">
+                    <i class="fas fa-phone-volume text-red-500 mr-2"></i>
+                    通话量持续激增
+                  </h4>
+                  <p class="text-gray-700">
+                    市民等待时间过长，服务体验下降。传统人工服务模式难以应对高峰期话务压力，
+                    导致接通率下降，群众满意度降低。
+                  </p>
+                </div>
+
+                <div class="flow-step">
+                  <h4 class="font-semibold text-lg mb-2">
+                    <i class="fas fa-edit text-orange-500 mr-2"></i>
+                    人工记录耗时耗力
+                  </h4>
+                  <p class="text-gray-700">
+                    传统记录方式效率低下，容易出现信息遗漏或记录不准确，
+                    影响后续问题的处理和分析质量。
+                  </p>
+                </div>
+
+                <div class="flow-step">
+                  <h4 class="font-semibold text-lg mb-2">
+                    <i class="fas fa-chart-line text-yellow-500 mr-2"></i>
+                    问题分析滞后
+                  </h4>
+                  <p class="text-gray-700">
+                    海量通话数据未能有效利用，政府难以快速精准把握民生热点，
+                    决策支持能力不足。
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <h3 class="text-2xl font-semibold mb-6 text-blue-900">解决方案目标</h3>
+              <div class="process-flow">
+                <img src="https://pic.rmb.bdstatic.com/bjh/3ea82bad0ec/250626/d55e946b91f1cd933cb87e6ad17fac06.png" alt="政府服务热线客服人员工作场景" class="w-full h-48 object-cover rounded-lg mb-6" size="medium" aspect="wide" style="photo" query="政府服务热线工作场景" referrerpolicy="no-referrer" data-modified="1" data-score="0.00"/>
+
+                <div class="grid gap-4">
+                  <div class="flex items-start space-x-3">
+                    <div class="w-8 h-8 bg-blue-500 text-white rounded-full flex items-center justify-center text-sm font-bold">1</div>
+                    <div>
+                      <h4 class="font-semibold">智能分流处理</h4>
+                      <p class="text-sm text-gray-600">AI客服7×24小时服务，有效分担话务压力</p>
+                    </div>
+                  </div>
+
+                  <div class="flex items-start space-x-3">
+                    <div class="w-8 h-8 bg-blue-500 text-white rounded-full flex items-center justify-center text-sm font-bold">2</div>
+                    <div>
+                      <h4 class="font-semibold">全量数据收集</h4>
+                      <p class="text-sm text-gray-600">录音全量保存，语音转写为结构化文本</p>
+                    </div>
+                  </div>
+
+                  <div class="flex items-start space-x-3">
+                    <div class="w-8 h-8 bg-blue-500 text-white rounded-full flex items-center justify-center text-sm font-bold">3</div>
+                    <div>
+                      <h4 class="font-semibold">智能分析挖掘</h4>
+                      <p class="text-sm text-gray-600">情感分析、主题分类、热点挖掘</p>
+                    </div>
+                  </div>
+
+                  <div class="flex items-start space-x-3">
+                    <div class="w-8 h-8 bg-blue-500 text-white rounded-full flex items-center justify-center text-sm font-bold">4</div>
+                    <div>
+                      <h4 class="font-semibold">可视化决策</h4>
+                      <p class="text-sm text-gray-600">动态数据大屏，辅助科学决策</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Architecture Section -->
+      <section id="architecture" class="py-16 px-8 bg-white">
+        <div class="max-w-6xl mx-auto">
+          <div class="section-header">
+            <h2 class="serif text-3xl font-bold text-gray-900">核心功能架构与业务流程</h2>
+          </div>
+
+          <!-- Process Flow Diagram -->
+          <div class="mb-12">
+            <h3 class="text-xl font-semibold mb-6 text-center">业务流程总览</h3>
+            <div class="mermaid-container">
+              <div class="mermaid-controls">
+                <button class="mermaid-control-btn zoom-in" title="放大">
+                  <i class="fas fa-search-plus"></i>
+                </button>
+                <button class="mermaid-control-btn zoom-out" title="缩小">
+                  <i class="fas fa-search-minus"></i>
+                </button>
+                <button class="mermaid-control-btn reset-zoom" title="重置">
+                  <i class="fas fa-expand-arrows-alt"></i>
+                </button>
+                <button class="mermaid-control-btn fullscreen" title="全屏查看">
+                  <i class="fas fa-expand"></i>
+                </button>
+              </div>
+              <div class="mermaid">
+                graph TD
+                A[&#34;市民来电接入&#34;] --&gt; B{&#34;智能分流&#34;}
+                B --&gt;|&#34;简单咨询&#34;| C[&#34;AI客服处理&#34;]
+                B --&gt;|&#34;复杂问题&#34;| D[&#34;人工客服处理&#34;]
+                B --&gt;|&#34;情绪激烈&#34;| D
+                B --&gt;|&#34;转人工请求&#34;| D
+
+                C --&gt; E[&#34;录音收集&#34;]
+                D --&gt; E
+
+                E --&gt; F[&#34;语音转文字&#34;]
+                F --&gt; G[&#34;AI智能分析&#34;]
+                G --&gt; H[&#34;情感分析&#34;]
+                G --&gt; I[&#34;主题分类&#34;]
+                G --&gt; J[&#34;热点挖掘&#34;]
+
+                H --&gt; K[&#34;工单自动派发&#34;]
+                I --&gt; K
+                J --&gt; K
+
+                K --&gt; L[&#34;工单跟踪&#34;]
+                L --&gt; M[&#34;结果可视化&#34;]
+                M --&gt; N[&#34;决策支持&#34;]
+                N --&gt; O[&#34;服务优化&#34;]
+
+                style A fill:#dbeafe,stroke:#1e40af,stroke-width:2px,color:#1e3a8a
+                style B fill:#fef3c7,stroke:#d97706,stroke-width:2px,color:#92400e
+                style C fill:#10b981,stroke:#059669,stroke-width:2px,color:#ffffff
+                style D fill:#f59e0b,stroke:#d97706,stroke-width:2px,color:#ffffff
+                style E fill:#60a5fa,stroke:#3b82f6,stroke-width:2px,color:#ffffff
+                style F fill:#60a5fa,stroke:#3b82f6,stroke-width:2px,color:#ffffff
+                style G fill:#8b5cf6,stroke:#7c3aed,stroke-width:2px,color:#ffffff
+                style H fill:#ec4899,stroke:#db2777,stroke-width:2px,color:#ffffff
+                style I fill:#ec4899,stroke:#db2777,stroke-width:2px,color:#ffffff
+                style J fill:#ec4899,stroke:#db2777,stroke-width:2px,color:#ffffff
+                style K fill:#14b8a6,stroke:#0d9488,stroke-width:2px,color:#ffffff
+                style L fill:#14b8a6,stroke:#0d9488,stroke-width:2px,color:#ffffff
+                style M fill:#6366f1,stroke:#4f46e5,stroke-width:2px,color:#ffffff
+                style N fill:#f97316,stroke:#ea580c,stroke-width:2px,color:#ffffff
+                style O fill:#ef4444,stroke:#dc2626,stroke-width:2px,color:#ffffff
+              </div>
+            </div>
+          </div>
+
+          <!-- Feature Modules -->
+          <div class="grid lg:grid-cols-2 gap-8">
+            <div class="feature-card">
+              <h3 class="text-xl font-semibold mb-4 text-blue-900">
+                <i class="fas fa-route mr-2"></i>智能分流与导航
+              </h3>
+              <p class="text-gray-700 mb-4">
+                利用NLP技术对市民描述进行深度理解，实时分析关键词、语义和上下文，
+                快速判断意图所属业务领域并精准分流。
+              </p>
+              <div class="bg-blue-50 p-4 rounded-lg">
+                <h4 class="font-semibold mb-2">预设业务分类：</h4>
+                <div class="flex flex-wrap gap-2">
+                  <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm">市政设施</span>
+                  <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm">物业管理</span>
+                  <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm">养老服务</span>
+                  <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm">教育咨询</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="feature-card">
+              <h3 class="text-xl font-semibold mb-4 text-blue-900">
+                <i class="fas fa-microphone mr-2"></i>全量录音收集与存储
+              </h3>
+              <p class="text-gray-700 mb-4">
+                自动对接现有12345热线系统，完整保存每一通市民来电录音，
+                建立结构化、可追溯的&#34;电子档案&#34;库。
+              </p>
+              <div class="space-y-2 text-sm">
+                <div class="flex items-center">
+                  <i class="fas fa-check-circle text-green-500 mr-2"></i>
+                  <span>唯一标识符管理</span>
+                </div>
+                <div class="flex items-center">
+                  <i class="fas fa-check-circle text-green-500 mr-2"></i>
+                  <span>元数据关联存储</span>
+                </div>
+                <div class="flex items-center">
+                  <i class="fas fa-check-circle text-green-500 mr-2"></i>
+                  <span>原始证据完整保留</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="feature-card">
+              <h3 class="text-xl font-semibold mb-4 text-blue-900">
+                <i class="fas fa-language mr-2"></i>智能语音转写
+              </h3>
+              <p class="text-gray-700 mb-4">
+                将海量通话录音快速准确转换为书面文字，支持多方言识别、
+                说话人分离和关键信息标记。
+              </p>
+              <div class="bg-gray-50 p-4 rounded-lg">
+                <h4 class="font-semibold mb-2">技术特性：</h4>
+                <ul class="text-sm space-y-1">
+                  <li>• 大连方言识别能力</li>
+                  <li>• 说话人自动分离</li>
+                  <li>• 时间戳和语气词标记</li>
+                  <li>• 实时转写与离线处理</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="feature-card">
+              <h3 class="text-xl font-semibold mb-4 text-blue-900">
+                <i class="fas fa-brain mr-2"></i>AI智能加工与分析
+              </h3>
+              <p class="text-gray-700 mb-4">
+                多层次深度分析挖掘隐藏信息，包括情感分析、主题分类、
+                热点挖掘和智能摘要生成。
+              </p>
+              <div class="grid grid-cols-2 gap-3">
+                <div class="text-center p-3 bg-purple-50 rounded-lg">
+                  <i class="fas fa-heart text-red-500 text-xl mb-2"></i>
+                  <div class="text-sm font-semibold">情感分析</div>
+                  <div class="text-xs text-gray-600">满意度评分</div>
+                </div>
+                <div class="text-center p-3 bg-green-50 rounded-lg">
+                  <i class="fas fa-tags text-green-500 text-xl mb-2"></i>
+                  <div class="text-sm font-semibold">主题分类</div>
+                  <div class="text-xs text-gray-600">自动归类</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Visualization and Knowledge Base -->
+          <div class="mt-12 grid lg:grid-cols-2 gap-8">
+            <div class="feature-card">
+              <h3 class="text-xl font-semibold mb-4 text-blue-900">
+                <i class="fas fa-chart-bar mr-2"></i>结果可视化展示
+              </h3>
+              <p class="text-gray-700 mb-4">
+                动态数据大屏实时展示关键运营指标和分析结果，
+                让管理者&#34;一眼看清&#34;服务现状。
+              </p>
+              <img src="https://pic.rmb.bdstatic.com/bjh/240129/dump/e06752c0a5dde7ed87d689b4b55e9ede.jpeg" alt="政府服务数据仪表盘" class="w-full h-40 object-cover rounded-lg mb-4" size="medium" aspect="wide" query="政府服务数据仪表盘" referrerpolicy="no-referrer" data-modified="1" data-score="0.00"/>
+              <div class="grid grid-cols-2 gap-4 text-sm">
+                <div>
+                  <h4 class="font-semibold mb-2">运营效率指标</h4>
+                  <ul class="space-y-1 text-gray-600">
+                    <li>• 实时通话量</li>
+                    <li>• AI/人工接通率</li>
+                    <li>• 平均处理时长</li>
+                  </ul>
+                </div>
+                <div>
+                  <h4 class="font-semibold mb-2">民生热点指标</h4>
+                  <ul class="space-y-1 text-gray-600">
+                    <li>• TOP10热门话题</li>
+                    <li>• 热点地域分布</li>
+                    <li>• 新兴事件预警</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <div class="feature-card">
+              <h3 class="text-xl font-semibold mb-4 text-blue-900">
+                <i class="fas fa-database mr-2"></i>知识库与数据库建设
+              </h3>
+              <p class="text-gray-700 mb-4">
+                构建持续学习和自我完善的数字化资产，
+                形成&#34;数据积累-模型优化-服务提升&#34;的良性循环。
+              </p>
+              <div class="space-y-4">
+                <div class="bg-blue-50 p-4 rounded-lg">
+                  <h4 class="font-semibold mb-2">知识库建设</h4>
+                  <p class="text-sm text-gray-700">
+                    历史咨询记录、AI分析结果、典型案例归纳，
+                    形成动态演进的知识图谱。
+                  </p>
+                </div>
+                <div class="bg-green-50 p-4 rounded-lg">
+                  <h4 class="font-semibold mb-2">数据库建设</h4>
+                  <p class="text-sm text-gray-700">
+                    原始数据存储、模型训练基础、
+                    持续优化AI准确性。
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Mechanisms Section -->
+      <section id="mechanisms" class="py-16 px-8 bg-gray-50">
+        <div class="max-w-6xl mx-auto">
+          <div class="section-header">
+            <h2 class="serif text-3xl font-bold text-gray-900">关键机制与标准</h2>
+          </div>
+
+          <div class="mb-12">
+            <h3 class="text-2xl font-semibold mb-8 text-blue-900">智能分流与人工介入机制</h3>
+
+            <div class="grid lg:grid-cols-2 gap-8">
+              <div class="space-y-6">
+                <div class="flow-step">
+                  <h4 class="font-semibold text-lg mb-3">
+                    <i class="fas fa-puzzle-piece text-blue-500 mr-2"></i>
+                    问题复杂度判断
+                  </h4>
+                  <p class="text-gray-700 mb-3">
+                    当市民诉求超出AI知识库范围或涉及多部门协调时，
+                    系统自动识别并转接人工客服。
+                  </p>
+                  <div class="bg-yellow-50 p-3 rounded-lg">
+                    <p class="text-sm text-yellow-800">
+                      <strong>示例：</strong>老旧小区加装电梯咨询，
+                      同时涉及住建、规划、市场监管等多个部门
+                    </p>
+                  </div>
+                </div>
+
+                <div class="flow-step">
+                  <h4 class="font-semibold text-lg mb-3">
+                    <i class="fas fa-heart text-red-500 mr-2"></i>
+                    市民情绪识别
+                  </h4>
+                  <p class="text-gray-700 mb-3">
+                    通过语音情感分析和文本情感算法，
+                    实时监测市民情绪状态，识别愤怒、焦虑等负面情绪。
+                  </p>
+                  <div class="bg-red-50 p-3 rounded-lg">
+                    <p class="text-sm text-red-800">
+                      <strong>触发条件：</strong>语速加快、音量提高、
+                      使用负面词汇（&#34;投诉&#34;、&#34;不作为&#34;、&#34;气愤&#34;）
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="space-y-6">
+                <div class="flow-step">
+                  <h4 class="font-semibold text-lg mb-3">
+                    <i class="fas fa-user-check text-green-500 mr-2"></i>
+                    市民主动要求
+                  </h4>
+                  <p class="text-gray-700 mb-3">
+                    尊重市民自主选择权，明确表达转人工意愿时
+                    立即响应执行转接。
+                  </p>
+                  <div class="bg-green-50 p-3 rounded-lg">
+                    <p class="text-sm text-green-800">
+                      <strong>关键词库：</strong>&#34;人工客服&#34;、&#34;转人工&#34;、
+                      &#34;找人工&#34;、&#34;人工服务&#34;、&#34;客服代表&#34;
+                    </p>
+                  </div>
+                </div>
+
+                <div class="flow-step">
+                  <h4 class="font-semibold text-lg mb-3">
+                    <i class="fas fa-clock text-purple-500 mr-2"></i>
+                    会话时长与轮次
+                  </h4>
+                  <p class="text-gray-700 mb-3">
+                    当交互时间超过3分钟或对话轮次超过5轮
+                    仍未有效解决时，自动触发转人工流程。
+                  </p>
+                  <div class="bg-purple-50 p-3 rounded-lg">
+                    <p class="text-sm text-purple-800">
+                      <strong>目的：</strong>避免无效沟通消耗市民耐心，
+                      及时移交疑难会话
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Visualization Core Indicators -->
+          <div class="bg-white rounded-2xl p-8 shadow-lg">
+            <h3 class="text-2xl font-semibold mb-8 text-blue-900">结果可视化核心指标</h3>
+
+            <div class="grid lg:grid-cols-2 gap-8">
+              <div>
+                <h4 class="text-lg font-semibold mb-4">
+                  <i class="fas fa-tachometer-alt text-blue-500 mr-2"></i>
+                  运营效率指标
+                </h4>
+                <div class="space-y-3">
+                  <div class="flex justify-between items-center p-3 bg-blue-50 rounded-lg">
+                    <span class="text-sm font-medium">实时通话量与接通率</span>
+                    <span class="text-blue-600 font-bold">实时监控</span>
+                  </div>
+                  <div class="flex justify-between items-center p-3 bg-blue-50 rounded-lg">
+                    <span class="text-sm font-medium">AI与人工处理量分布</span>
+                    <span class="text-blue-600 font-bold">动态图表</span>
+                  </div>
+                  <div class="flex justify-between items-center p-3 bg-blue-50 rounded-lg">
+                    <span class="text-sm font-medium">平均处理时长</span>
+                    <span class="text-blue-600 font-bold">趋势分析</span>
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <h4 class="text-lg font-semibold mb-4">
+                  <i class="fas fa-star text-yellow-500 mr-2"></i>
+                  服务质量指标
+                </h4>
+                <div class="space-y-3">
+                  <div class="flex justify-between items-center p-3 bg-yellow-50 rounded-lg">
+                    <span class="text-sm font-medium">市民满意度评分</span>
+                    <span class="text-yellow-600 font-bold">1-10分制</span>
+                  </div>
+                  <div class="flex justify-between items-center p-3 bg-yellow-50 rounded-lg">
+                    <span class="text-sm font-medium">首次呼叫解决率</span>
+                    <span class="text-yellow-600 font-bold">FCR指标</span>
+                  </div>
+                  <div class="flex justify-between items-center p-3 bg-yellow-50 rounded-lg">
+                    <span class="text-sm font-medium">AI应答准确率</span>
+                    <span class="text-yellow-600 font-bold">质检评分</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Technology Section -->
+      <section id="technology" class="py-16 px-8 bg-white">
+        <div class="max-w-6xl mx-auto">
+          <div class="section-header">
+            <h2 class="serif text-3xl font-bold text-gray-900">技术实现与系统架构</h2>
+          </div>
+
+          <!-- System Architecture -->
+          <div class="mb-12">
+            <h3 class="text-xl font-semibold mb-6 text-center">系统整体架构</h3>
+            <div class="mermaid-container">
+              <div class="mermaid-controls">
+                <button class="mermaid-control-btn zoom-in" title="放大">
+                  <i class="fas fa-search-plus"></i>
+                </button>
+                <button class="mermaid-control-btn zoom-out" title="缩小">
+                  <i class="fas fa-search-minus"></i>
+                </button>
+                <button class="mermaid-control-btn reset-zoom" title="重置">
+                  <i class="fas fa-expand-arrows-alt"></i>
+                </button>
+                <button class="mermaid-control-btn fullscreen" title="全屏查看">
+                  <i class="fas fa-expand"></i>
+                </button>
+              </div>
+              <div class="mermaid">
+                graph TB
+                subgraph &#34;接入层&#34;
+                A1[&#34;电话热线 PSTN&#34;]
+                A2[&#34;微信小程序&#34;]
+                A3[&#34;政务服务APP&#34;]
+                A4[&#34;官方网站&#34;]
+                end
+
+                subgraph &#34;智能交互层&#34;
+                B1[&#34;AI客服机器人&#34;]
+                B2[&#34;人工坐席&#34;]
+                B3[&#34;请求调度中心&#34;]
+                end
+
+                subgraph &#34;数据处理层&#34;
+                C1[&#34;语音转写 ASR&#34;]
+                C2[&#34;自然语言处理 NLP&#34;]
+                C3[&#34;智能分析引擎&#34;]
+                end
+
+                subgraph &#34;应用支撑层&#34;
+                D1[&#34;工单系统&#34;]
+                D2[&#34;智能知识库&#34;]
+                D3[&#34;智能质检系统&#34;]
+                end
+
+                subgraph &#34;展示层&#34;
+                E1[&#34;数据可视化大屏&#34;]
+                E2[&#34;智能报告&#34;]
+                E3[&#34;预警推送&#34;]
+                end
+
+                A1 --&gt; B3
+                A2 --&gt; B3
+                A3 --&gt; B3
+                A4 --&gt; B3
+
+                B3 --&gt; B1
+                B3 --&gt; B2
+
+                B1 --&gt; C1
+                B2 --&gt; C1
+
+                C1 --&gt; C2
+                C2 --&gt; C3
+
+                C3 --&gt; D1
+                C3 --&gt; D2
+                C2 --&gt; D3
+
+                D1 --&gt; E1
+                D2 --&gt; E1
+                C3 --&gt; E1
+
+                E1 --&gt; E2
+                E1 --&gt; E3
+
+                style A1 fill:#e1f5fe,stroke:#0277bd,stroke-width:2px,color:#01579b
+                style A2 fill:#e1f5fe,stroke:#0277bd,stroke-width:2px,color:#01579b
+                style A3 fill:#e1f5fe,stroke:#0277bd,stroke-width:2px,color:#01579b
+                style A4 fill:#e1f5fe,stroke:#0277bd,stroke-width:2px,color:#01579b
+                style B1 fill:#c8e6c9,stroke:#2e7d32,stroke-width:2px,color:#1b5e20
+                style B2 fill:#c8e6c9,stroke:#2e7d32,stroke-width:2px,color:#1b5e20
+                style B3 fill:#fff3e0,stroke:#f57c00,stroke-width:2px,color:#e65100
+                style C1 fill:#e8f5e8,stroke:#388e3c,stroke-width:2px,color:#2e7d32
+                style C2 fill:#e8f5e8,stroke:#388e3c,stroke-width:2px,color:#2e7d32
+                style C3 fill:#e8f5e8,stroke:#388e3c,stroke-width:2px,color:#2e7d32
+                style D1 fill:#fff8e1,stroke:#f9a825,stroke-width:2px,color:#f57f17
+                style D2 fill:#fff8e1,stroke:#f9a825,stroke-width:2px,color:#f57f17
+                style D3 fill:#fff8e1,stroke:#f9a825,stroke-width:2px,color:#f57f17
+                style E1 fill:#fce4ec,stroke:#c2185b,stroke-width:2px,color:#ad1457
+                style E2 fill:#fce4ec,stroke:#c2185b,stroke-width:2px,color:#ad1457
+                style E3 fill:#fce4ec,stroke:#c2185b,stroke-width:2px,color:#ad1457
+              </div>
+            </div>
+          </div>
+
+          <!-- Key Technologies -->
+          <div class="grid lg:grid-cols-3 gap-8">
+            <div class="feature-card">
+              <h3 class="text-xl font-semibold mb-4 text-blue-900">
+                <i class="fas fa-brain mr-2"></i>AI大模型应用
+              </h3>
+              <p class="text-gray-700 mb-4">
+                以DeepSeek为代表的国产AI大模型为热线智能化升级提供强大技术引擎，
+                显著提升多环节效率和智能化水平。
+              </p>
+              <div class="space-y-2 text-sm">
+                <div class="flex items-center">
+                  <i class="fas fa-check text-green-500 mr-2"></i>
+                  <span>智能问答与知识库构建</span>
+                </div>
+                <div class="flex items-center">
+                  <i class="fas fa-check text-green-500 mr-2"></i>
+                  <span>智能工单处理与派单</span>
+                </div>
+                <div class="flex items-center">
+                  <i class="fas fa-check text-green-500 mr-2"></i>
+                  <span>数据分析与报告生成</span>
+                </div>
+              </div>
+              <p class="text-xs text-gray-500 mt-4">
+                <a href="http://www.chinatelecom.com.cn/news/03/202502/t20250221_86531.html" class="citation">参考：西安12345大模型应用案例</a>
+              </p>
+            </div>
+
+            <div class="feature-card">
+              <h3 class="text-xl font-semibold mb-4 text-blue-900">
+                <i class="fas fa-microphone-alt mr-2"></i>语音识别与NLP
+              </h3>
+              <p class="text-gray-700 mb-4">
+                高精度ASR技术和深度学习NLP算法，
+                实现自然流畅的人机交互体验。
+              </p>
+              <div class="bg-gray-50 p-4 rounded-lg mb-4">
+                <h4 class="font-semibold mb-2">核心能力：</h4>
+                <ul class="text-sm space-y-1">
+                  <li>• 多方言识别（普通话、大连方言）</li>
+                  <li>• 智能打断和热词管理</li>
+                  <li>• 意图识别与实体抽取</li>
+                  <li>• 情感分析与语义匹配</li>
+                </ul>
+              </div>
+              <p class="text-xs text-gray-500">
+                <a href="http://www.zsnews.cn/news/index/view/cateid/35/id/758705.html" class="citation">参考：中山12345语音识别准确率</a>
+              </p>
+            </div>
+
+            <div class="feature-card">
+              <h3 class="text-xl font-semibold mb-4 text-blue-900">
+                <i class="fas fa-chart-network mr-2"></i>大数据分析与挖掘
+              </h3>
+              <p class="text-gray-700 mb-4">
+                通过大数据技术挖掘热线数据价值，
+                实现数据驱动的智能治理。
+              </p>
+              <div class="grid grid-cols-2 gap-3 text-sm">
+                <div class="bg-blue-50 p-3 rounded-lg text-center">
+                  <i class="fas fa-database text-blue-500 text-lg mb-2"></i>
+                  <div class="font-semibold">数据存储</div>
+                  <div class="text-xs">Hadoop/Spark</div>
+                </div>
+                <div class="bg-green-50 p-3 rounded-lg text-center">
+                  <i class="fas fa-cogs text-green-500 text-lg mb-2"></i>
+                  <div class="font-semibold">机器学习</div>
+                  <div class="text-xs">聚类/关联分析</div>
+                </div>
+                <div class="bg-purple-50 p-3 rounded-lg text-center">
+                  <i class="fas fa-chart-line text-purple-500 text-lg mb-2"></i>
+                  <div class="font-semibold">预测分析</div>
+                  <div class="text-xs">趋势预测</div>
+                </div>
+                <div class="bg-orange-50 p-3 rounded-lg text-center">
+                  <i class="fas fa-eye text-orange-500 text-lg mb-2"></i>
+                  <div class="font-semibold">数据可视化</div>
+                  <div class="text-xs">ECharts/Tableau</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Expected Outcomes Section -->
+      <section id="expected-outcomes" class="py-16 px-8 bg-gray-50">
+        <div class="max-w-6xl mx-auto">
+          <div class="section-header">
+            <h2 class="serif text-3xl font-bold text-gray-900">预期成效与价值</h2>
+          </div>
+
+          <div class="grid lg:grid-cols-2 gap-12 mb-12">
+            <!-- Efficiency Improvements -->
+            <div>
+              <h3 class="text-2xl font-semibold mb-6 text-blue-900">效率提升</h3>
+              <div class="space-y-6">
+                <div class="feature-card">
+                  <h4 class="font-semibold text-lg mb-3">
+                    <i class="fas fa-robot text-green-500 mr-2"></i>
+                    AI智能分流
+                  </h4>
+                  <p class="text-gray-700 mb-4">
+                    AI客服7×24小时不间断处理标准化咨询，
+                    预计可分流<strong>40%以上</strong>的来电，
+                    有效缓解人工坐席压力。
+                  </p>
+                  <div class="bg-green-50 p-4 rounded-lg">
+                    <p class="text-sm text-green-800">
+                      <strong>效果：</strong>市民平均等待时间显著缩短，
+                      热线服务容量大幅提升
+                    </p>
+                  </div>
+                </div>
+
+                <div class="feature-card">
+                  <h4 class="font-semibold text-lg mb-3">
+                    <i class="fas fa-tachometer-alt text-blue-500 mr-2"></i>
+                    工单处理加速
+                  </h4>
+                  <p class="text-gray-700 mb-4">
+                    智能工单系统通过自动填单、智能派单等功能，
+                    将人工处理工单的平均时长缩短<strong>40%以上</strong>。
+                  </p>
+                  <div class="bg-blue-50 p-4 rounded-lg">
+                    <p class="text-sm text-blue-800">
+                      <strong>参考：</strong>中山市12345热线单通电话处理效率提升40%
+                      <a href="http://www.zsnews.cn/news/index/view/cateid/35/id/758705.html" class="citation ml-2">[270]</a>
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Quality Improvements -->
+            <div>
+              <h3 class="text-2xl font-semibold mb-6 text-blue-900">质量优化</h3>
+              <div class="space-y-6">
+                <div class="feature-card">
+                  <h4 class="font-semibold text-lg mb-3">
+                    <i class="fas fa-shield-alt text-purple-500 mr-2"></i>
+                    全量智能质检
+                  </h4>
+                  <p class="text-gray-700 mb-4">
+                    AI质检系统对100%通话进行自动分析，
+                    检查服务规范、识别服务禁语、评估服务态度，
+                    实现全覆盖智能监控。
+                  </p>
+                  <div class="bg-purple-50 p-4 rounded-lg">
+                    <p class="text-sm text-purple-800">
+                      <strong>优势：</strong>从传统人工抽检升级为全覆盖质检，
+                      确保服务过程规范性
+                    </p>
+                  </div>
+                </div>
+
+                <div class="feature-card">
+                  <h4 class="font-semibold text-lg mb-3">
+                    <i class="fas fa-heart text-red-500 mr-2"></i>
+                    情感关怀服务
+                  </h4>
+                  <p class="text-gray-700 mb-4">
+                    通过情感分析技术实时感知市民情绪，
+                    对情绪激动市民优先转接经验丰富的人工客服进行安抚，
+                    将潜在投诉化解在萌芽状态。
+                  </p>
+                  <div class="bg-red-50 p-4 rounded-lg">
+                    <p class="text-sm text-red-800">
+                      <strong>效果：</strong>提升服务&#34;温度&#34;，
+                      彰显政府服务的人性化水平
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Decision Support and Satisfaction -->
+          <div class="grid lg:grid-cols-2 gap-8">
+            <div class="feature-card">
+              <h3 class="text-xl font-semibold mb-4 text-blue-900">
+                <i class="fas fa-chart-line mr-2"></i>
+                决策支持增强
+              </h3>
+              <p class="text-gray-700 mb-4">
+                将热线从被动&#34;传声筒&#34;转变为主动&#34;城市传感器&#34;，
+                通过数据深度挖掘为政府决策提供支持。
+              </p>
+              <img src="https://kimi-web-img.moonshot.cn/img/img-blog.csdnimg.cn/42f64390bfb09dfb6987c2a50e7d822713ec7659.png" alt="智慧城市数据可视化分析平台界面" class="w-full h-40 object-cover rounded-lg mb-4" size="medium" aspect="wide" query="智慧城市数据可视化平台" referrerpolicy="no-referrer" data-modified="1" data-score="0.00"/>
+              <div class="space-y-2 text-sm">
+                <div class="flex items-center">
+                  <i class="fas fa-fire text-orange-500 mr-2"></i>
+                  <span>实时民生热点排行榜</span>
+                </div>
+                <div class="flex items-center">
+                  <i class="fas fa-map-marked-alt text-green-500 mr-2"></i>
+                  <span>区域问题热力图分析</span>
+                </div>
+                <div class="flex items-center">
+                  <i class="fas fa-exclamation-triangle text-red-500 mr-2"></i>
+                  <span>潜在风险预警提示</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="feature-card">
+              <h3 class="text-xl font-semibold mb-4 text-blue-900">
+                <i class="fas fa-smile mr-2"></i>
+                群众满意度提升
+              </h3>
+              <p class="text-gray-700 mb-4">
+                通过效率提升、质量优化和人性化服务，
+                最终实现群众满意度的显著提升。
+              </p>
+              <div class="bg-gradient-to-r from-green-100 to-blue-100 p-6 rounded-lg">
+                <h4 class="font-semibold mb-4 text-center">预期服务体验改善</h4>
+                <div class="grid grid-cols-2 gap-4 text-sm">
+                  <div class="text-center">
+                    <i class="fas fa-clock text-blue-500 text-xl mb-2"></i>
+                    <div class="font-semibold">更短等待</div>
+                    <div class="text-xs text-gray-600">7×24小时响应</div>
+                  </div>
+                  <div class="text-center">
+                    <i class="fas fa-user-tie text-green-500 text-xl mb-2"></i>
+                    <div class="font-semibold">更专业解答</div>
+                    <div class="text-xs text-gray-600">AI+人工协同</div>
+                  </div>
+                  <div class="text-center">
+                    <i class="fas fa-heart text-red-500 text-xl mb-2"></i>
+                    <div class="font-semibold">更人性化沟通</div>
+                    <div class="text-xs text-gray-600">情感关怀服务</div>
+                  </div>
+                  <div class="text-center">
+                    <i class="fas fa-check-circle text-purple-500 text-xl mb-2"></i>
+                    <div class="font-semibold">更高效解决</div>
+                    <div class="text-xs text-gray-600">闭环管理</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Success Metrics -->
+          <div class="mt-12 bg-white rounded-2xl p-8 shadow-lg">
+            <h3 class="text-2xl font-semibold mb-8 text-center text-blue-900">关键成功指标</h3>
+            <div class="grid md:grid-cols-4 gap-6">
+              <div class="text-center">
+                <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <i class="fas fa-phone text-blue-600 text-xl"></i>
+                </div>
+                <h4 class="font-semibold mb-2">接通率提升</h4>
+                <p class="text-sm text-gray-600">AI客服100%接通
+                  <br/>人工客服接通率显著提升
+                </p>
+              </div>
+              <div class="text-center">
+                <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <i class="fas fa-thumbs-up text-green-600 text-xl"></i>
+                </div>
+                <h4 class="font-semibold mb-2">满意度提升</h4>
+                <p class="text-sm text-gray-600">群众满意度评分
+                  <br/>达到96%以上
+                </p>
+              </div>
+              <div class="text-center">
+                <div class="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <i class="fas fa-bolt text-purple-600 text-xl"></i>
+                </div>
+                <h4 class="font-semibold mb-2">处理效率</h4>
+                <p class="text-sm text-gray-600">工单处理时长
+                  <br/>缩短40%以上
+                </p>
+              </div>
+              <div class="text-center">
+                <div class="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <i class="fas fa-bullseye text-orange-600 text-xl"></i>
+                </div>
+                <h4 class="font-semibold mb-2">派单准确</h4>
+                <p class="text-sm text-gray-600">智能派单
+                  <br/>准确率达到92%以上
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Footer -->
+      <footer class="bg-blue-900 text-white py-8 px-8">
+        <div class="max-w-6xl mx-auto text-center">
+          <p class="text-blue-200">
+            沙河口区&#34;AI+12345&#34;智慧客服系统功能架构提案书
+          </p>
+          <p class="text-sm text-blue-300 mt-2">
+            构建现代化智慧政务服务体系，提升政府治理能力现代化水平
+          </p>
+        </div>
+      </footer>
+    </main>
+
+    <script>
+        // Initialize Mermaid
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: 'base',
+            themeVariables: {
+                primaryColor: '#ffffff',
+                primaryTextColor: '#1e293b',
+                primaryBorderColor: '#3b82f6',
+                lineColor: '#64748b',
+                secondaryColor: '#f8fafc',
+                tertiaryColor: '#e2e8f0',
+                background: '#ffffff',
+                mainBkg: '#ffffff',
+                secondBkg: '#f8fafc',
+                tertiaryBkg: '#e2e8f0',
+                textColor: '#1e293b',
+                fontFamily: 'Inter, sans-serif',
+                fontSize: '13px'
+            },
+            flowchart: {
+                useMaxWidth: false,
+                htmlLabels: true,
+                curve: 'basis',
+                padding: 20
+            },
+            sequence: {
+                useMaxWidth: false,
+                wrap: true
+            },
+            gantt: {
+                useMaxWidth: false
+            },
+            journey: {
+                useMaxWidth: false
+            },
+            timeline: {
+                useMaxWidth: false
+            }
+        });
+
+        // Initialize Mermaid Controls for zoom and pan
+        function initializeMermaidControls() {
+            const containers = document.querySelectorAll('.mermaid-container');
+
+            containers.forEach(container => {
+            const mermaidElement = container.querySelector('.mermaid');
+            let scale = 1;
+            let isDragging = false;
+            let startX, startY, translateX = 0, translateY = 0;
+
+            // 触摸相关状态
+            let isTouch = false;
+            let touchStartTime = 0;
+            let initialDistance = 0;
+            let initialScale = 1;
+            let isPinching = false;
+
+            // Zoom controls
+            const zoomInBtn = container.querySelector('.zoom-in');
+            const zoomOutBtn = container.querySelector('.zoom-out');
+            const resetBtn = container.querySelector('.reset-zoom');
+            const fullscreenBtn = container.querySelector('.fullscreen');
+
+            function updateTransform() {
+                mermaidElement.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+
+                if (scale > 1) {
+                container.classList.add('zoomed');
+                } else {
+                container.classList.remove('zoomed');
+                }
+
+                mermaidElement.style.cursor = isDragging ? 'grabbing' : 'grab';
+            }
+
+            if (zoomInBtn) {
+                zoomInBtn.addEventListener('click', () => {
+                scale = Math.min(scale * 1.25, 4);
+                updateTransform();
+                });
+            }
+
+            if (zoomOutBtn) {
+                zoomOutBtn.addEventListener('click', () => {
+                scale = Math.max(scale / 1.25, 0.3);
+                if (scale <= 1) {
+                    translateX = 0;
+                    translateY = 0;
+                }
+                updateTransform();
+                });
+            }
+
+            if (resetBtn) {
+                resetBtn.addEventListener('click', () => {
+                scale = 1;
+                translateX = 0;
+                translateY = 0;
+                updateTransform();
+                });
+            }
+
+            if (fullscreenBtn) {
+                fullscreenBtn.addEventListener('click', () => {
+                if (container.requestFullscreen) {
+                    container.requestFullscreen();
+                } else if (container.webkitRequestFullscreen) {
+                    container.webkitRequestFullscreen();
+                } else if (container.msRequestFullscreen) {
+                    container.msRequestFullscreen();
+                }
+                });
+            }
+
+            // Mouse Events
+            mermaidElement.addEventListener('mousedown', (e) => {
+                if (isTouch) return; // 如果是触摸设备，忽略鼠标事件
+
+                isDragging = true;
+                startX = e.clientX - translateX;
+                startY = e.clientY - translateY;
+                mermaidElement.style.cursor = 'grabbing';
+                updateTransform();
+                e.preventDefault();
+            });
+
+            document.addEventListener('mousemove', (e) => {
+                if (isDragging && !isTouch) {
+                translateX = e.clientX - startX;
+                translateY = e.clientY - startY;
+                updateTransform();
+                }
+            });
+
+            document.addEventListener('mouseup', () => {
+                if (isDragging && !isTouch) {
+                isDragging = false;
+                mermaidElement.style.cursor = 'grab';
+                updateTransform();
+                }
+            });
+
+            document.addEventListener('mouseleave', () => {
+                if (isDragging && !isTouch) {
+                isDragging = false;
+                mermaidElement.style.cursor = 'grab';
+                updateTransform();
+                }
+            });
+
+            // 获取两点之间的距离
+            function getTouchDistance(touch1, touch2) {
+                return Math.hypot(
+                touch2.clientX - touch1.clientX,
+                touch2.clientY - touch1.clientY
+                );
+            }
+
+            // Touch Events - 触摸事件处理
+            mermaidElement.addEventListener('touchstart', (e) => {
+                isTouch = true;
+                touchStartTime = Date.now();
+
+                if (e.touches.length === 1) {
+                // 单指拖动
+                isPinching = false;
+                isDragging = true;
+
+                const touch = e.touches[0];
+                startX = touch.clientX - translateX;
+                startY = touch.clientY - translateY;
+
+                } else if (e.touches.length === 2) {
+                // 双指缩放
+                isPinching = true;
+                isDragging = false;
+
+                const touch1 = e.touches[0];
+                const touch2 = e.touches[1];
+                initialDistance = getTouchDistance(touch1, touch2);
+                initialScale = scale;
+                }
+
+                e.preventDefault();
+            }, { passive: false });
+
+            mermaidElement.addEventListener('touchmove', (e) => {
+                if (e.touches.length === 1 && isDragging && !isPinching) {
+                // 单指拖动
+                const touch = e.touches[0];
+                translateX = touch.clientX - startX;
+                translateY = touch.clientY - startY;
+                updateTransform();
+
+                } else if (e.touches.length === 2 && isPinching) {
+                // 双指缩放
+                const touch1 = e.touches[0];
+                const touch2 = e.touches[1];
+                const currentDistance = getTouchDistance(touch1, touch2);
+
+                if (initialDistance > 0) {
+                    const newScale = Math.min(Math.max(
+                    initialScale * (currentDistance / initialDistance),
+                    0.3
+                    ), 4);
+                    scale = newScale;
+                    updateTransform();
+                }
+                }
+
+                e.preventDefault();
+            }, { passive: false });
+
+            mermaidElement.addEventListener('touchend', (e) => {
+                // 重置状态
+                if (e.touches.length === 0) {
+                isDragging = false;
+                isPinching = false;
+                initialDistance = 0;
+
+                // 延迟重置isTouch，避免鼠标事件立即触发
+                setTimeout(() => {
+                    isTouch = false;
+                }, 100);
+                } else if (e.touches.length === 1 && isPinching) {
+                // 从双指变为单指，切换为拖动模式
+                isPinching = false;
+                isDragging = true;
+
+                const touch = e.touches[0];
+                startX = touch.clientX - translateX;
+                startY = touch.clientY - translateY;
+                }
+
+                updateTransform();
+            });
+
+            mermaidElement.addEventListener('touchcancel', (e) => {
+                isDragging = false;
+                isPinching = false;
+                initialDistance = 0;
+
+                setTimeout(() => {
+                isTouch = false;
+                }, 100);
+
+                updateTransform();
+            });
+
+            // Enhanced wheel zoom with better center point handling
+            container.addEventListener('wheel', (e) => {
+                e.preventDefault();
+                const rect = container.getBoundingClientRect();
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+
+                const delta = e.deltaY > 0 ? 0.9 : 1.1;
+                const newScale = Math.min(Math.max(scale * delta, 0.3), 4);
+
+                // Adjust translation to zoom towards center
+                if (newScale !== scale) {
+                const scaleDiff = newScale / scale;
+                translateX = translateX * scaleDiff;
+                translateY = translateY * scaleDiff;
+                scale = newScale;
+
+                if (scale <= 1) {
+                    translateX = 0;
+                    translateY = 0;
+                }
+
+                updateTransform();
+                }
+            });
+
+            // Initialize display
+            updateTransform();
+            });
+        }
+
+        // Initialize interactivity after mermaid renders
+        setTimeout(() => {
+            initializeMermaidControls();
+        }, 1000);
+
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Active navigation highlighting
+        window.addEventListener('scroll', function() {
+            const sections = document.querySelectorAll('section[id]');
+            const navLinks = document.querySelectorAll('.toc a');
+            
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop - 100;
+                if (window.pageYOffset >= sectionTop) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === '#' + current) {
+                    link.classList.add('active');
+                }
+            });
+        });
+
+        // Mobile menu toggle (if needed)
+        function toggleMobileMenu() {
+            const toc = document.querySelector('.toc');
+            toc.classList.toggle('open');
+        }
+    </script>
+  
+
+</body></html>
