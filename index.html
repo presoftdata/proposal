@@ -544,47 +544,8 @@
                   <i class="fas fa-expand"></i>
                 </button>
               </div>
-              <div class="mermaid">
-                graph TD
-                A[&#34;市民来电接入&#34;] --&gt; B{&#34;智能分流&#34;}
-                B --&gt;|&#34;简单咨询&#34;| C[&#34;AI客服处理&#34;]
-                B --&gt;|&#34;复杂问题&#34;| D[&#34;人工客服处理&#34;]
-                B --&gt;|&#34;情绪激烈&#34;| D
-                B --&gt;|&#34;转人工请求&#34;| D
-
-                C --&gt; E[&#34;录音收集&#34;]
-                D --&gt; E
-
-                E --&gt; F[&#34;语音转文字&#34;]
-                F --&gt; G[&#34;AI智能分析&#34;]
-                G --&gt; H[&#34;情感分析&#34;]
-                G --&gt; I[&#34;主题分类&#34;]
-                G --&gt; J[&#34;热点挖掘&#34;]
-
-                H --&gt; K[&#34;工单自动派发&#34;]
-                I --&gt; K
-                J --&gt; K
-
-                K --&gt; L[&#34;工单跟踪&#34;]
-                L --&gt; M[&#34;结果可视化&#34;]
-                M --&gt; N[&#34;决策支持&#34;]
-                N --&gt; O[&#34;服务优化&#34;]
-
-                style A fill:#dbeafe,stroke:#1e40af,stroke-width:2px,color:#1e3a8a
-                style B fill:#fef3c7,stroke:#d97706,stroke-width:2px,color:#92400e
-                style C fill:#10b981,stroke:#059669,stroke-width:2px,color:#ffffff
-                style D fill:#f59e0b,stroke:#d97706,stroke-width:2px,color:#ffffff
-                style E fill:#60a5fa,stroke:#3b82f6,stroke-width:2px,color:#ffffff
-                style F fill:#60a5fa,stroke:#3b82f6,stroke-width:2px,color:#ffffff
-                style G fill:#8b5cf6,stroke:#7c3aed,stroke-width:2px,color:#ffffff
-                style H fill:#ec4899,stroke:#db2777,stroke-width:2px,color:#ffffff
-                style I fill:#ec4899,stroke:#db2777,stroke-width:2px,color:#ffffff
-                style J fill:#ec4899,stroke:#db2777,stroke-width:2px,color:#ffffff
-                style K fill:#14b8a6,stroke:#0d9488,stroke-width:2px,color:#ffffff
-                style L fill:#14b8a6,stroke:#0d9488,stroke-width:2px,color:#ffffff
-                style M fill:#6366f1,stroke:#4f46e5,stroke-width:2px,color:#ffffff
-                style N fill:#f97316,stroke:#ea580c,stroke-width:2px,color:#ffffff
-                style O fill:#ef4444,stroke:#dc2626,stroke-width:2px,color:#ffffff
+              <div class="mermaid-container">
+                  <img src="images/flowchart.png" alt="业务流程图" style="max-width: 100%; height: auto;" />
               </div>
             </div>
           </div>
