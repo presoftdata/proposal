@@ -529,25 +529,7 @@
           <!-- Process Flow Diagram -->
           <div class="mb-12">
             <h3 class="text-xl font-semibold mb-6 text-center">业务流程总览</h3>
-            <div class="mermaid-container">
-              <div class="mermaid-controls">
-                <button class="mermaid-control-btn zoom-in" title="放大">
-                  <i class="fas fa-search-plus"></i>
-                </button>
-                <button class="mermaid-control-btn zoom-out" title="缩小">
-                  <i class="fas fa-search-minus"></i>
-                </button>
-                <button class="mermaid-control-btn reset-zoom" title="重置">
-                  <i class="fas fa-expand-arrows-alt"></i>
-                </button>
-                <button class="mermaid-control-btn fullscreen" title="全屏查看">
-                  <i class="fas fa-expand"></i>
-                </button>
-              </div>
-              <img src="images/flowchart_business.png" alt="业务流程图" style="width: 100%; max-width: 1200px; height: auto; cursor: pointer;" id="flowchartImage" />
-              <div class="scale-info" style="text-align: center; margin-top: 10px; color: #64748b;"> 缩放: <span id="scalePercent">100%</span>
-              </div>
-            </div>
+            <img src="images/flowchart_business.png" alt="业务流程图" style="width: 50%; max-width: 800px; height: auto; cursor: pointer; display: block; margin: 0 auto;" id="flowchartImage" />
           </div>
 
           <!-- Feature Modules -->
@@ -843,97 +825,7 @@
           <!-- System Architecture -->
           <div class="mb-12">
             <h3 class="text-xl font-semibold mb-6 text-center">系统整体架构</h3>
-            <div class="mermaid-container">
-              <div class="mermaid-controls">
-                <button class="mermaid-control-btn zoom-in" title="放大">
-                  <i class="fas fa-search-plus"></i>
-                </button>
-                <button class="mermaid-control-btn zoom-out" title="缩小">
-                  <i class="fas fa-search-minus"></i>
-                </button>
-                <button class="mermaid-control-btn reset-zoom" title="重置">
-                  <i class="fas fa-expand-arrows-alt"></i>
-                </button>
-                <button class="mermaid-control-btn fullscreen" title="全屏查看">
-                  <i class="fas fa-expand"></i>
-                </button>
-              </div>
-              <div class="mermaid">
-                graph TB
-                subgraph &#34;接入层&#34;
-                A1[&#34;电话热线 PSTN&#34;]
-                A2[&#34;微信小程序&#34;]
-                A3[&#34;政务服务APP&#34;]
-                A4[&#34;官方网站&#34;]
-                end
-
-                subgraph &#34;智能交互层&#34;
-                B1[&#34;AI客服机器人&#34;]
-                B2[&#34;人工坐席&#34;]
-                B3[&#34;请求调度中心&#34;]
-                end
-
-                subgraph &#34;数据处理层&#34;
-                C1[&#34;语音转写 ASR&#34;]
-                C2[&#34;自然语言处理 NLP&#34;]
-                C3[&#34;智能分析引擎&#34;]
-                end
-
-                subgraph &#34;应用支撑层&#34;
-                D1[&#34;工单系统&#34;]
-                D2[&#34;智能知识库&#34;]
-                D3[&#34;智能质检系统&#34;]
-                end
-
-                subgraph &#34;展示层&#34;
-                E1[&#34;数据可视化大屏&#34;]
-                E2[&#34;智能报告&#34;]
-                E3[&#34;预警推送&#34;]
-                end
-
-                A1 --&gt; B3
-                A2 --&gt; B3
-                A3 --&gt; B3
-                A4 --&gt; B3
-
-                B3 --&gt; B1
-                B3 --&gt; B2
-
-                B1 --&gt; C1
-                B2 --&gt; C1
-
-                C1 --&gt; C2
-                C2 --&gt; C3
-
-                C3 --&gt; D1
-                C3 --&gt; D2
-                C2 --&gt; D3
-
-                D1 --&gt; E1
-                D2 --&gt; E1
-                C3 --&gt; E1
-
-                E1 --&gt; E2
-                E1 --&gt; E3
-
-                style A1 fill:#e1f5fe,stroke:#0277bd,stroke-width:2px,color:#01579b
-                style A2 fill:#e1f5fe,stroke:#0277bd,stroke-width:2px,color:#01579b
-                style A3 fill:#e1f5fe,stroke:#0277bd,stroke-width:2px,color:#01579b
-                style A4 fill:#e1f5fe,stroke:#0277bd,stroke-width:2px,color:#01579b
-                style B1 fill:#c8e6c9,stroke:#2e7d32,stroke-width:2px,color:#1b5e20
-                style B2 fill:#c8e6c9,stroke:#2e7d32,stroke-width:2px,color:#1b5e20
-                style B3 fill:#fff3e0,stroke:#f57c00,stroke-width:2px,color:#e65100
-                style C1 fill:#e8f5e8,stroke:#388e3c,stroke-width:2px,color:#2e7d32
-                style C2 fill:#e8f5e8,stroke:#388e3c,stroke-width:2px,color:#2e7d32
-                style C3 fill:#e8f5e8,stroke:#388e3c,stroke-width:2px,color:#2e7d32
-                style D1 fill:#fff8e1,stroke:#f9a825,stroke-width:2px,color:#f57f17
-                style D2 fill:#fff8e1,stroke:#f9a825,stroke-width:2px,color:#f57f17
-                style D3 fill:#fff8e1,stroke:#f9a825,stroke-width:2px,color:#f57f17
-                style E1 fill:#fce4ec,stroke:#c2185b,stroke-width:2px,color:#ad1457
-                style E2 fill:#fce4ec,stroke:#c2185b,stroke-width:2px,color:#ad1457
-                style E3 fill:#fce4ec,stroke:#c2185b,stroke-width:2px,color:#ad1457
-              </div>
-            </div>
+            <img src="images/system_tech.png" alt="系统架构图" style="width: 50%; max-width: 800px; height: auto; cursor: pointer; display: block; margin: 0 auto;" id="systemtechImage" />
           </div>
 
           <!-- Key Technologies -->
